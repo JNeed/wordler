@@ -14,12 +14,18 @@ KEYBOARD_ROW3 = '0ZXCVBNM0'
 KEYBOARD_ROWS = [KEYBOARD_ROW1,KEYBOARD_ROW2,KEYBOARD_ROW3]
 
 
-# add configuration settings into excel file
+# Can configure these settings in the "Config" sheet of wordle_doc.xlsx.
 
 settings = pd.read_excel('wordle_doc.xlsx', sheet_name='Config')
 display_graphics = settings['Selection'][0]
 has_been_run = settings['Selection'][1]
 starting_word = settings['Selection'][2]
+display_num_left = settings['Selection'][3]
+display_words_left = settings['Selection'][4]
+display_guesses = settings['Selection'][5]
+display_wotd = settings['Selection'][6]
+display_victory = settings['Selection'][7]
+
 
 guessable = initial_processing(has_been_run)
 
@@ -35,9 +41,12 @@ with sync_playwright() as p:
     won = you_win(guess)
 
     while (not won) and guess_num < 6:
-        print('guess: ', word)
-        print('number of words left: ', str(len(guessable)))
-        print('remaining words:\n', guessable.to_string(index=False))
+        if display_guesses:
+            print('guess: ', word)
+        if display_num_left:
+            print('number of words left: ', str(len(guessable)))
+        if display_words_left:
+            print('remaining words:\n', guessable.to_string(index=False))
 
         word = random.choice(guessable.tolist())
         guesses.append(word)
@@ -45,7 +54,10 @@ with sync_playwright() as p:
         guessable = handle_hints(guess, guessable)
         guess_num+=1
         won = you_win(guess)
-    print("You won in ", str(guess_num), ' guesses!')
+    if display_wotd:
+        print('The word of the day is: ', word)
+    if display_victory:
+        print("You won in ", str(guess_num), ' guesses!')
 
     if not has_been_run:
         update_records(word,guesses)
