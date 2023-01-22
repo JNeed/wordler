@@ -36,9 +36,15 @@ def take_a_guess(word,keyboard_rows,page,guess_num):
     hints = get_hints(page,guess_num + 1)
     return zipem(word,hints)
 
-def start_game(p):
-    # browser = p.chromium.launch()
-    browser = p.chromium.launch(headless=False)
+def start_game(p,display_graphics):
+    browser = ''
+    if display_graphics:
+        browser = p.chromium.launch(headless=False)
+    elif not display_graphics:
+        browser = p.chromium.launch()
+    else:
+        print('malfunction in website_handling.py: start_game()')
+    # browser = p.chromium.launch(headless=False)
     page = browser.new_context().new_page()
     page.goto("https://www.nytimes.com/games/wordle/index.html")
     page.click('body > div > div > dialog > div > button > svg')

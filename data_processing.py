@@ -4,10 +4,10 @@ from datetime import datetime
 
 
 
-def initial_processing(already_run_today):
+def initial_processing(has_been_run):
     candidates = pd.read_excel('wordle_doc.xlsx',sheet_name='All Guess Candidates')
     used = pd.read_excel('wordle_doc.xlsx',sheet_name='Past Words')
-    if already_run_today:
+    if has_been_run:
         used = used[:-1]
     c = candidates["Guess Candidates"].apply(lambda x: x.upper()) # when i get rid of the x.lower(), my code stops working
     p = used["Past Words"].apply(lambda x: x.upper())

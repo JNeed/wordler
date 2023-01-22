@@ -14,16 +14,19 @@ KEYBOARD_ROW3 = '0ZXCVBNM0'
 KEYBOARD_ROWS = [KEYBOARD_ROW1,KEYBOARD_ROW2,KEYBOARD_ROW3]
 
 
-already_run_today = True
-
 # add configuration settings into excel file
 
-guessable = initial_processing(already_run_today)
+settings = pd.read_excel('wordle_doc.xlsx', sheet_name='Config')
+display_graphics = settings['Selection'][0]
+has_been_run = settings['Selection'][1]
+starting_word = settings['Selection'][2]
+
+guessable = initial_processing(has_been_run)
 
 with sync_playwright() as p:
-    page = start_game(p)
+    page = start_game(p, display_graphics)
     guess_num = 0
-    word = 'RAISE'
+    word = starting_word
     guesses = [word]
     guess = take_a_guess(word, KEYBOARD_ROWS, page, guess_num)
     guessable = handle_hints(guess, guessable)
@@ -44,7 +47,7 @@ with sync_playwright() as p:
         won = you_win(guess)
     print("You won in ", str(guess_num), ' guesses!')
 
-    if not already_run_today:
+    if not has_been_run:
         update_records(word,guesses)
 
     page.close()
