@@ -28,7 +28,7 @@ def type_key(letter,keyboard_rows,page):
     page.locator(loc).click()
 
 def take_a_guess(word,keyboard_rows,page,guess_num):
-    word = word.lower()
+    word = word.upper()
     for letter in word:
         type_key(letter,keyboard_rows,page)
     type_key('1',keyboard_rows,page)
