@@ -63,3 +63,6 @@ def update_records(word, guesses):
     store_latest(word)
     add_word_path(guesses)
     add_perf_stats(guesses)
+    
+    
+    #FIXME: try to refactor 
