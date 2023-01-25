@@ -29,7 +29,7 @@ with sync_playwright() as p:
     word = starting_word
     guesses = [word]
     guess = take_a_guess(word, KEYBOARD_ROWS, page, guess_num)
-    guessable = handle_hints(guess, guessable)
+    guessable = handle_hints(word,guess, guessable)
     guess_num+=1
 
     won = you_win(guess)
@@ -42,7 +42,7 @@ with sync_playwright() as p:
         word = random.choice(guessable.tolist())
         guesses.append(word)
         guess = take_a_guess(word, KEYBOARD_ROWS, page, guess_num)
-        guessable = handle_hints(guess, guessable)
+        guessable = handle_hints(word, guess, guessable)
         guess_num+=1
         won = you_win(guess)
     print("You won in ", str(guess_num), ' guesses!')
